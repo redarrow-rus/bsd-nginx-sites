@@ -1,3 +1,4 @@
+# Init
 BEGIN {
     flag = 0
     inserted = 0
@@ -11,6 +12,7 @@ BEGIN {
     LOG = "/tmp/nginx.log"
 }
 
+# 'server' block start
 /^[ \t]*server[ \t]*\{/ {
     flag = 1
     bracket = 1
@@ -23,6 +25,7 @@ BEGIN {
     next
 }
 
+# usual strings block
 {
     if (flag == 1) {
         res = res $0 "\n"
@@ -32,6 +35,7 @@ BEGIN {
     print NR $0 " // Flag: " flag > LOG #!!!
 }
 
+# 'server_name' directive
 /^[ \t]*server_name/ {
     server_name = $NF
     sub(/;/, "", server_name)
@@ -42,6 +46,7 @@ BEGIN {
     print NR $0 " // Server Name: " server_name > LOG #!!!
 }
 
+# 'listen' directive
 /listen/ {
     port = $2
     sub(/;/, "", port)
@@ -49,6 +54,7 @@ BEGIN {
     print NR $0 " // Port: " port > LOG #!!!
 }
 
+# Closing bracket block
 /\}[ \t]*$/ {
     if (flag == 1) {
         bracket--
@@ -58,11 +64,13 @@ BEGIN {
             print res > TRG
             res = ""
             server_name = ""
+            print NR " // ...writing config to " TRG > LOG #!!!
         }
     }
     print NR $0 " // Close bracket. Bracket: " bracket ", flag: " flag > LOG #!!!
 }
 
+# Open bracket block
 /\{[ \t]*$/ {
     if (flag == 1) {
         bracket++
@@ -70,6 +78,7 @@ BEGIN {
     print NR $0 " // Open bracket. Bracket: " bracket > LOG #!!!
 }
 
+# Print new nginx.conf
 END {
     print stay
 }
