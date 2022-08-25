@@ -54,8 +54,16 @@ BEGIN {
     print NR $0 " // Port: " port > LOG #!!!
 }
 
+# Open bracket block
+/\{[ \t]*/ {
+    if (flag == 1) {
+        bracket++
+    }
+    print NR $0 " // Open bracket. Bracket: " bracket > LOG #!!!
+}
+
 # Closing bracket block
-/\}[ \t]*$/ {
+/\}[ \t]*/ {
     if (flag == 1) {
         bracket--
         if (bracket == 0) {
@@ -68,14 +76,6 @@ BEGIN {
         }
     }
     print NR $0 " // Close bracket. Bracket: " bracket ", flag: " flag > LOG #!!!
-}
-
-# Open bracket block
-/\{[ \t]*$/ {
-    if (flag == 1) {
-        bracket++
-    }
-    print NR $0 " // Open bracket. Bracket: " bracket > LOG #!!!
 }
 
 # Print new nginx.conf
