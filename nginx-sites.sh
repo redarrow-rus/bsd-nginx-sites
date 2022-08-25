@@ -10,6 +10,7 @@ BASEDIR=/usr/local/etc/nginx
 [ "$( whoami)" == "root" ] || msg_err "Need to be root."
 [ -d "$BASEDIR" ] || msg_err "Nginx directory not found. Please verify path: $BASEDIR"
 [ -f "$BASEDIR/nginx.conf" ] || msg_err "nginx.conf not found. Please verify path: $BASEDIR/nginx.conf"
+[ -d "$BASEDIR/sites-enabled" ] && msg_err "sites-... dir seems to exist. Nothing to do."
 nginxBin=$( whereis -bq nginx )
 [ -z "$nginxBin" ] && msg_err "Cannot find Nginx executable."
 
