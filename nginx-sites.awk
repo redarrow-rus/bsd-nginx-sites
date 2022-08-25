@@ -9,7 +9,6 @@ BEGIN {
     if (TARGET_PATH == "") {
         TARGET_PATH = "/usr/local/etc/nginx"
     }
-    LOG = "/tmp/nginx.log"
 }
 
 # 'server' block start
@@ -21,7 +20,6 @@ BEGIN {
         stay = stay "\tinclude " TARGET_PATH "/sites-enabled/*.conf;\n"
         inserted = 1
     }
-    print NR $0 " // Server directive" > LOG #!!!
     next
 }
 
@@ -32,7 +30,6 @@ BEGIN {
     } else {
         stay = stay $0 "\n"
     }
-    print NR $0 " // Flag: " flag > LOG #!!!
 }
 
 # 'server_name' directive
@@ -43,7 +40,6 @@ BEGIN {
     if (server_name ~ /^(localhost|_)$/) {
         server_name = "default"
     }
-    print NR $0 " // Server Name: " server_name > LOG #!!!
 }
 
 # 'listen' directive
@@ -51,7 +47,6 @@ BEGIN {
     port = $2
     sub(/;/, "", port)
     gsub(/[:\[\]]+/, "ipv6_", port)
-    print NR $0 " // Port: " port > LOG #!!!
 }
 
 # Open bracket block
@@ -59,7 +54,6 @@ BEGIN {
     if (flag == 1) {
         bracket++
     }
-    print NR $0 " // Open bracket. Bracket: " bracket > LOG #!!!
 }
 
 # Closing bracket block
@@ -72,10 +66,8 @@ BEGIN {
             print res > TRG
             res = ""
             server_name = ""
-            print NR " // ...writing config to " TRG > LOG #!!!
         }
     }
-    print NR $0 " // Close bracket. Bracket: " bracket ", flag: " flag > LOG #!!!
 }
 
 # Print new nginx.conf
