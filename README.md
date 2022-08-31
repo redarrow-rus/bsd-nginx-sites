@@ -1,6 +1,6 @@
 # bsd-nginx-sites — BSD tool for NGINX 'sites-available' creating
 
-Standard nginx package has the monolithic file **nginx.conf**. But when using nginx on Debian / Ubuntu etc., you will have some improvements, f.e. saving site configs into separate files in _/etc/nginx/sites-available_ directory. Their soft links are in _etc/nginx/sites-enabled_ directory, and the main nginx.conf refers to them via directive:
+Standard nginx package has the monolithic file **nginx.conf**. But when using nginx on Debian / Ubuntu etc., you will have some improvements, f.e. saving site configs into separate files in _/etc/nginx/sites-available_ directory. Their soft links are in _/etc/nginx/sites-enabled_ directory, and the main nginx.conf refers to them via directive:
 
     include /etc/nginx/sites-enabled/*.conf
 
